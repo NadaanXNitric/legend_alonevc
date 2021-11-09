@@ -6,7 +6,7 @@ from Client.callsmusic import client as USER
 from config import SUDO_USERS
 
 
-@Client.on_message(filters.command(["play"]) & ~filters.private & ~filters.bot)
+@Client.on_message(filters.command(["userbotjoin", "join"]) & ~filters.private & ~filters.bot)
 @authorized_users_only
 @errors
 async def addchannel(client, message):
@@ -80,7 +80,7 @@ async def bye(client, message):
 
 
 @Client.on_message(
-    filters.command(["play"]) & ~filters.private & ~filters.bot
+    filters.command(["userbotjoin", "join"]) & ~filters.private & ~filters.bot
 )
 @authorized_users_only
 @errors
