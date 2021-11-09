@@ -322,7 +322,7 @@ async def play(_, message: Message):
             return await lel.edit(
                 "🧐 **𝐖𝐡𝐢𝐜𝐡 𝐒𝐨𝐧𝐠 𝐘𝐨𝐮 𝐖𝐚𝐧𝐧𝐚 𝐏𝐥𝐚𝐲 ??**"
             )
-        await lel.edit("🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠...𝐇𝐨𝐥𝐝 𝐎𝐧**)
+        await lel.edit("🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠...𝐇𝐨𝐥𝐝 𝐎𝐧**")
         query = message.text.split(None, 1)[1]
         # print(query)
         await lel.edit("🎵 **𝐏𝐫𝐨𝐜𝐞𝐬𝐬𝐢𝐧𝐠...𝐇𝐨𝐥𝐝 𝐎𝐧**")
