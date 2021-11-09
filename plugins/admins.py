@@ -17,7 +17,7 @@ from pytgcalls.types.input_stream import InputAudioStream
 @authorized_users_only
 async def pause(_, message: Message):
     await callsmusic.pytgcalls.pause_stream(message.chat.id)
-    await message.reply_photo(photo="https://telegra.ph/file/b0ac50463c45323770af4.png"
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5SYYny4TEOaOtHM2iAQYcXpopYKQcAAl8EAAKtOVFU4t6DLNYe1zseBA"
     )
 
 
@@ -26,7 +26,7 @@ async def pause(_, message: Message):
 @authorized_users_only
 async def resume(_, message: Message):
     await callsmusic.pytgcalls.resume_stream(message.chat.id)
-    await message.reply_photo(photo="https://telegra.ph/file/07d10fad662935fff6ed4.png"
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5UYYnz8nckQPJ2yr4ViMz8zPMI6jYAAmcEAAKtOVFUuXZntUPE9z4eBA"
     )
 
 
@@ -40,7 +40,7 @@ async def stop(_, message: Message):
         pass
 
     await callsmusic.pytgcalls.leave_group_call(message.chat.id)
-    await message.reply_photo(photo="https://telegra.ph/file/f4e03a171d497e77c9e80.png"
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5TYYn2KV6RA4JbhVsTMwHCENohYY4AAmYEAAKtOVFUDoN9ihMa9EceBA"
     )
 
 
@@ -70,7 +70,7 @@ async def skip(_, message: Message):
         skip = qeue.pop(0)
     if not qeue:
         return
-    await message.reply_photo(photo="https://telegra.ph/file/fdd76db9d943caa138b36.png"
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5VYYn2nS179FTt_lsmGe3xSjxVCQEAAmgEAAKtOVFUmF3LAtytI4YeBA"
    ) 
 
 
@@ -86,5 +86,5 @@ async def admincache(client, message: Message):
         ),
     )
 
-    await message.reply_photo(photo="https://telegra.ph/file/87b96f28baeafd65a160e.png"
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5WYYn2y87cTguuxQtp9ikBsIVoTfwAAmwEAAKtOVFUZ754KHVWtOAeBA"
     )
