@@ -1,76 +1,102 @@
 import os
-import requests
 import aiohttp
-import yt_dlp
+import asyncio
+import json
+import sys
+import time
+from youtubesearchpython import SearchVideos
+from pyrogram import filters, Client
+from yt_dlp import YoutubeDL
+from yt_dlp.utils import (
+    ContentTooShortError,
+    DownloadError,
+    ExtractorError,
+    GeoRestrictedError,
+    MaxDownloadsReached,
+    PostProcessingError,
+    UnavailableVideoError,
+    XAttrMetadataError,
+)
 
-from pyrogram import Client, filters
-from youtube_search import YoutubeSearch
-from helpers.errors import capture_err
-from config import BOT_USERNAME
-
-
-def time_to_seconds(time):
-    stringt = str(time)
-    return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(":"))))
-
-
-@Client.on_message(filters.command(["song"]))
-def song(client, message):
-
-    user_id = message.from_user.id
-    user_name = message.from_user.first_name
-    rpk = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
-
-    query = "".join(" " + str(i) for i in message.command[1:])
-    print(query)
-    m = message.reply("🔎 Finding the song...")
-    ydl_opts = {"format": "bestaudio[ext=m4a]"}
+@Client.on_message(filters.command("song") & ~filters.edited)
+async def song(client, message):
+    cap = "@warbotz"
+    url = message.text.split(None, 1)[1]
+    rkp = await message.reply("𝐏𝐫𝐨𝐜𝐞𝐬𝐬𝐢𝐧𝐠...𝐇𝐨𝐥𝐝 𝐎𝐧")
+    if not url:
+        await rkp.edit("**𝐖𝐡𝐢𝐜𝐡 𝐒𝐨𝐧𝐠 𝐘𝐨𝐮 𝐖𝐚𝐧𝐭?**\n𝐔𝐬𝐚𝐠𝐞`/song <song name>`")
+    search = SearchVideos(url, offset=1, mode="json", max_results=1)
+    test = search.result()
+    p = json.loads(test)
+    q = p.get("search_result")
     try:
-        results = YoutubeSearch(query, max_results=1).to_dict()
-        link = f"https://youtube.com{results[0]['url_suffix']}"
-        # print(results)
-        title = results[0]["title"][:40]
-        thumbnail = results[0]["thumbnails"][0]
-        thumb_name = f"thumb{title}.jpg"
-        thumb = requests.get(thumbnail, allow_redirects=True)
-        open(thumb_name, "wb").write(thumb.content)
-
-        duration = results[0]["duration"]
-        url_suffix = results[0]["url_suffix"]
-        views = results[0]["views"]
-
-    except Exception as e:
-        m.edit(
-            "✖️ Found Nothing. Sorry.\n\nTry another keywork or maybe spell it properly."
-        )
-        print(str(e))
+        url = q[0]["link"]
+    except BaseException:
+        return await rkp.edit("𝐅𝐚𝐢𝐥𝐞𝐝 𝐓𝐨 𝐅𝐢𝐧𝐝 𝐓𝐡𝐚𝐭 𝐒𝐨𝐧𝐠.")
+    type = "audio"
+    if type == "audio":
+        opts = {
+            "format": "bestaudio",
+            "addmetadata": True,
+            "key": "FFmpegMetadata",
+            "writethumbnail": True,
+            "prefer_ffmpeg": True,
+            "geo_bypass": True,
+            "nocheckcertificate": True,
+            "postprocessors": [
+                {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": "mp3",
+                    "preferredquality": "320",
+                }
+            ],
+            "outtmpl": "%(id)s.mp3",
+            "quiet": True,
+            "logtostderr": False,
+        }
+        song = True
+    try:
+        await rkp.edit("𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐢𝐧𝐠...𝐇𝐨𝐥𝐝 𝐎𝐧")
+        with YoutubeDL(opts) as rip:
+            rip_data = rip.extract_info(url)
+    except DownloadError as DE:
+        await rkp.edit(f"`{str(DE)}`")
         return
-    m.edit("`Downloading Song... Please wait ⏱`")
-    try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info_dict = ydl.extract_info(link, download=False)
-            audio_file = ydl.prepare_filename(info_dict)
-            ydl.process_info(info_dict)
-        rep = f"🎙 **Title**: [{title[:35]}]({link})\n🎬 **Source**: YouTube\n⏱️ **Duration**: `{duration}`\n👁‍🗨 **Views**: `{views}`\n📤 **By**: @{BOT_USERNAME} "
-        secmul, dur, dur_arr = 1, 0, duration.split(":")
-        for i in range(len(dur_arr) - 1, -1, -1):
-            dur += int(dur_arr[i]) * secmul
-            secmul *= 60
-        message.reply_audio(
-            audio_file,
-            caption=rep,
-            thumb=thumb_name,
-            parse_mode="md",
-            title=title,
-            duration=dur,
+    except ContentTooShortError:
+        await rkp.edit("`The download content was too short.`")
+        return
+    except GeoRestrictedError:
+        await rkp.edit(
+            "`Video is not available from your geographic location due to geographic restrictions imposed by a website.`"
         )
-        m.delete()
+        return
+    except MaxDownloadsReached:
+        await rkp.edit("`Max-downloads limit has been reached.`")
+        return
+    except PostProcessingError:
+        await rkp.edit("`There was an error during post processing.`")
+        return
+    except UnavailableVideoError:
+        await rkp.edit("`Media is not available in the requested format.`")
+        return
+    except XAttrMetadataError as XAME:
+        await rkp.edit(f"`{XAME.code}: {XAME.msg}\n{XAME.reason}`")
+        return
+    except ExtractorError:
+        await rkp.edit("`There was an error during info extraction.`")
+        return
     except Exception as e:
-        m.edit("❌ Error")
-        print(e)
-
-    try:
-        os.remove(audio_file)
-        os.remove(thumb_name)
-    except Exception as e:
-        print(e)
+        await rkp.edit(f"{str(type(e)): {str(e)}}")
+        return
+    time.time()
+    if song:
+        await rkp.edit("𝐔𝐩𝐥𝐨𝐚𝐝𝐢𝐧𝐠...𝐇𝐨𝐥𝐝 𝐎𝐧") #blaze
+        lol = "./etc/thumb.jpg"
+        lel = await message.reply_audio(
+                 f"{rip_data['id']}.mp3",
+                 duration=int(rip_data["duration"]),
+                 title=str(rip_data["title"]),
+                 performer=str(rip_data["uploader"]),
+                 thumb=lol,
+                 caption=cap)  #JEcode
+        await rkp.delete()

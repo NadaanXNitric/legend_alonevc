@@ -17,9 +17,7 @@ from pytgcalls.types.input_stream import InputAudioStream
 @authorized_users_only
 async def pause(_, message: Message):
     await callsmusic.pytgcalls.pause_stream(message.chat.id)
-    await message.reply_photo(
-                             photo="https://telegra.ph/file/dd6814e241bfc4c0255cd.jpg", 
-                             caption="**⏸ Music Paused.\n use /resume**"
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5SYYny4TEOaOtHM2iAQYcXpopYKQcAAl8EAAKtOVFU4t6DLNYe1zseBA"
     )
 
 
@@ -28,9 +26,7 @@ async def pause(_, message: Message):
 @authorized_users_only
 async def resume(_, message: Message):
     await callsmusic.pytgcalls.resume_stream(message.chat.id)
-    await message.reply_photo(
-                             photo="https://telegra.ph/file/d0f2dd5b7519bb5444139.jpg", 
-                             caption="**▶️ Music Resumed.\n use /pause**"
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5UYYnz8nckQPJ2yr4ViMz8zPMI6jYAAmcEAAKtOVFUuXZntUPE9z4eBA"
     )
 
 
@@ -44,9 +40,7 @@ async def stop(_, message: Message):
         pass
 
     await callsmusic.pytgcalls.leave_group_call(message.chat.id)
-    await message.reply_photo(
-                             photo="https://telegra.ph/file/8d22aa7d53b6acb9a125e.jpg", 
-                             caption="❌ **Stopped Streaming\n use /play for new song**"
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5TYYn2KV6RA4JbhVsTMwHCENohYY4AAmYEAAKtOVFUDoN9ihMa9EceBA"
     )
 
 
@@ -60,7 +54,7 @@ async def skip(_, message: Message):
     for x in callsmusic.pytgcalls.active_calls:
         ACTV_CALL.append(int(x.chat_id))
     if int(chat_id) not in ACTV_CALL:
-        await message.reply_text("❗ Nothing is playing to skip!")
+        await message.reply_text("❗ 𝐍𝐨𝐭𝐡𝐢𝐧𝐠 𝐈𝐬 𝐏𝐥𝐚𝐲𝐢𝐧𝐠 𝐓𝐨 𝐒𝐤𝐢𝐩")
     else:
         callsmusic.queues.task_done(chat_id)
 
@@ -76,9 +70,7 @@ async def skip(_, message: Message):
         skip = qeue.pop(0)
     if not qeue:
         return
-    await message.reply_photo(
-                             photo="https://telegra.ph/file/96129f4d0e984d2432e55.jpg", 
-                             caption=f'- Skipped **{skip[0]}**\n- Now Playing **{qeue[0][0]}**'
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5VYYn2nS179FTt_lsmGe3xSjxVCQEAAmgEAAKtOVFUmF3LAtytI4YeBA"
    ) 
 
 
@@ -94,7 +86,5 @@ async def admincache(client, message: Message):
         ),
     )
 
-    await message.reply_photo(
-                              photo="https://telegra.ph/file/d881ea9de7620ecc36d08.jpg",
-                              caption="**Reloaded\n Admin List updated**"
+    await message.reply_sticker("CAACAgUAAx0CXmiEIwABAo5WYYn2y87cTguuxQtp9ikBsIVoTfwAAmwEAAKtOVFUZ754KHVWtOAeBA"
     )

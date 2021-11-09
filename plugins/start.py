@@ -1,60 +1,51 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+
 from config import BOT_NAME as bn
 from helpers.filters import other_filters2
-from time import time
-from datetime import datetime
-from helpers.decorators import authorized_users_only
-from config import BOT_USERNAME, ASSISTANT_USERNAME
-
-START_TIME = datetime.utcnow()
-START_TIME_ISO = START_TIME.replace(microsecond=0).isoformat()
-TIME_DURATION_UNITS = (
-    ("week", 60 * 60 * 24 * 7),
-    ("day", 60 ** 2 * 24),
-    ("hour", 60 ** 2),
-    ("min", 60),
-    ("sec", 1),
-)
-
-
-async def _human_time_duration(seconds):
-    if seconds == 0:
-        return "inf"
-    parts = []
-    for unit, div in TIME_DURATION_UNITS:
-        amount, seconds = divmod(int(seconds), div)
-        if amount > 0:
-            parts.append("{} {}{}".format(amount, unit, "" if amount == 1 else "s"))
-    return ", ".join(parts)
 
 
 @Client.on_message(other_filters2)
 async def start(_, message: Message):
-        await message.reply_text(
-        f"""**Hey, I'm {bn} 🎀
-I Cᴀɴ Pʟᴀʏ Mᴜsɪᴄ Iɴ Yᴏᴜʀ Gʀᴏᴜᴩ Vᴏɪᴄᴇ Cʜᴀᴛ. Dᴇᴠᴇʟᴏᴩᴇᴅ Bʏ [𝐃𝐞𝐂𝐨𝐝𝐞-𝐃𝐞𝐯𝐬](https://t.me/DeeCodeDevs).
-Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴩ Aɴᴅ Pʟᴀʏ Mᴜsɪᴄ Fʀᴇᴇʟʏ!**
+    await message.reply_sticker("CAADBQADRQIAAhHHQFSfHJ-IR0eN6gI")
+    await message.reply_text(
+        f"""**- 𝐇𝐞𝐲 𝐀𝐦 {bn} 💛🐬,
+
+- 𝐈 𝐂𝐚𝐧 𝐏𝐥𝐚𝐲 𝐌𝐮𝐬𝐢𝐜 𝐈𝐧 𝐘𝐨𝐮𝐫 𝐆𝐫𝐨𝐮𝐩'𝐬 𝐕𝐨𝐢𝐜𝐞 𝐂𝐚𝐥𝐥. 𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐝 𝐁𝐲 [𝐌𝐀𝐇𝐈](https://t.me/ALONE_BOY_XD_01) ❣️🤞.
+
+𝘼𝙙𝙙 𝙢𝙚 𝙩𝙤 𝙮𝙤𝙪𝙧 𝙜𝙧𝙤𝙪𝙥 𝙖𝙣𝙙 𝙥𝙡𝙖𝙮 𝙢𝙪𝙨𝙞𝙘 𝙛𝙧𝙚𝙚𝙡𝙮 😘💕**
         """,
         reply_markup=InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                        "𝐂𝐨𝐦𝐦𝐚𝐧𝐝 𝐋𝐢𝐬𝐭🧰", url="https://telegra.ph/text-10-24")
+                         " 𝐎𝐰𝐧𝐞𝐫 ", url="https://t.me/ALONE_BOY_XD_01")
                   ],[
                     InlineKeyboardButton(
-                       " 𝐒𝐮𝐩𝐩𝐨𝐫𝐭👿", url="https://t.me/DecodeSupport"
+                        "😈 𝐒𝐮𝐩𝐩𝐨𝐫𝐭", url="https://t.me/shivamdemon"
                     ),
                     InlineKeyboardButton(
-                        "𝐔𝐩𝐝𝐚𝐭𝐞𝐬", url="https://t.me/DeecodeBots"
+                        "✌️ 𝐅𝐫𝐢𝐞𝐧𝐝", url="https://t.me/crowrace"
                     )
-                ],[
+                ],[ 
                     InlineKeyboardButton(
-                        "➕ 𝐀𝐝𝐝 𝐌𝐞 𝐓𝐨 𝐘𝐨𝐮𝐫 𝐆𝐫𝐨𝐮𝐩➕",
-                        url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
-                    )
-                ]
+                        "➕ 𝐀𝐝𝐝 𝐓𝐨 𝐘𝐨𝐮𝐫 𝐆𝐫𝐨𝐮𝐩 ➕", url="https://t.me/LEGEND_ALONE_MUSIC_BOT?startgroup=true"
+                    )]
             ]
         ),
      disable_web_page_preview=True
     )
+
+@Client.on_message(filters.command("start") & ~filters.private & ~filters.channel)
+async def gstart(_, message: Message):
+      await message.reply_text("""** 𝐀𝐥𝐨𝐧𝐞 𝐌𝐮𝐬𝐢𝐜 𝐏𝐥𝐚𝐲𝐞𝐫 𝐈𝐬 𝐎𝐧𝐥𝐢𝐧𝐞 ✅**""",
+      reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        "🔊 𝐌𝐚𝐧𝐚𝐠𝐞𝐫", url="https://t.me/ALONE_BOY_XD_01")
+                ]
+            ]
+        )
+   )
+
