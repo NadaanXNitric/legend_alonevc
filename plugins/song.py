@@ -1,22 +1,13 @@
 import os
+import requests
 import aiohttp
-import asyncio
-import json
-import sys
-import time
-from youtubesearchpython import SearchVideos
-from pyrogram import filters, Client
-from yt_dlp import YoutubeDL
-from yt_dlp.utils import (
-    ContentTooShortError,
-    DownloadError,
-    ExtractorError,
-    GeoRestrictedError,
-    MaxDownloadsReached,
-    PostProcessingError,
-    UnavailableVideoError,
-    XAttrMetadataError,
-)
+import yt_dlp
+
+from pyrogram import Client, filters
+from youtube_search import YoutubeSearch
+from helpers.errors import capture_err
+from config import BOT_USERNAME
+
 
 @Client.on_message(filters.command("song") & ~filters.edited)
 async def song(client, message):
