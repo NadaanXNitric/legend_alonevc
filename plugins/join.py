@@ -1,11 +1,9 @@
-import asyncio
-
 from pyrogram import Client, filters
 from pyrogram.errors import UserAlreadyParticipant
-
-from config import SUDO_USERS, ASSISTANT_USERNAME
+import asyncio
 from helpers.decorators import authorized_users_only, errors
-from callsmusic import client as USER
+from Client.callsmusic import client as USER
+from config import SUDO_USERS
 
 
 @Client.on_message(filters.command(["play"]) & ~filters.private & ~filters.bot)
