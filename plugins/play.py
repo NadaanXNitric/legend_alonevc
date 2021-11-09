@@ -279,7 +279,7 @@ async def play(_, message: Message):
         await generate_cover(requested_by, title, views, duration, thumbnail)  
         file_path = await converter.convert(youtube.download(url))
     ACTV_CALLS = []
-    for x in callsmusic.pytgcalls.active_calls:
+    for x in callsmusic.active_calls:
        ACTV_CALLS.append(int(x.chat_id))
     if int(message.chat.id) in ACTV_CALLS:
         position = await queues.put(message.chat.id, file=file_path)
@@ -292,7 +292,7 @@ async def play(_, message: Message):
         os.remove("final.png")
         return await lel.delete()
     else:
-        await callsmusic.pytgcalls.set_stream(message.chat.id, file_path)
+        await callsmusic.join_group_call(message.chat.id, file_path)
         await message.reply_photo(
         photo="final.png",
         reply_markup=keyboard,
