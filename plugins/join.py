@@ -3,7 +3,7 @@ import asyncio
 from pyrogram import Client, filters
 from pyrogram.errors import UserAlreadyParticipant
 
-from config import SUDO_USERS, ASSISTANT_NAME
+from config import SUDO_USERS, ASSISTANT_USERNAME
 from helpers.decorators import authorized_users_only, errors
 from callsmusic import client as USER
 
