@@ -2,8 +2,7 @@ pyrogram
 TgCrypto
 py-tgcalls
 python-dotenv
-yt_dlp
-youtube_dl
+https://github.com/lukka12/yt-dl@master
 youtube_search_python==1.4.6
 requests
 aiohttp
